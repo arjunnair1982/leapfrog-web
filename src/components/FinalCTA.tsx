@@ -1,4 +1,4 @@
-export function FinalCTA() {
+export function FinalCTA({ onOpen }: { onOpen: () => void }) {
   return (
     <section id="cta" className="py-20 lg:py-28 bg-dark text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,12 +11,12 @@ export function FinalCTA() {
           </p>
 
           <div className="mt-8">
-            <a
-              href="#"
+            <button
+              onClick={onOpen}
               className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-dark bg-brand-green rounded-xl hover:bg-brand-green-dark transition-colors shadow-lg shadow-brand-green/25"
             >
               Talk to Our AI Consultant
-            </a>
+            </button>
           </div>
 
           <div className="mt-6">

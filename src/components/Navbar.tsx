@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function Navbar() {
+export function Navbar({ onOpen }: { onOpen: () => void }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -22,12 +22,12 @@ export function Navbar() {
             <span className="text-xs text-gray-400">
               Powered by <span className="font-semibold text-gray-600">Great Learning</span>
             </span>
-            <a
-              href="#cta"
+            <button
+              onClick={onOpen}
               className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-brand-green rounded-lg hover:bg-brand-green-dark transition-colors"
             >
               Talk to Our AI Consultant
-            </a>
+            </button>
           </div>
 
           <button
@@ -51,13 +51,15 @@ export function Navbar() {
               <p className="text-xs text-gray-400 pb-2">
                 Powered by <span className="font-semibold text-gray-600">Great Learning</span>
               </p>
-              <a
-                href="#cta"
-                onClick={() => setMobileOpen(false)}
-                className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white bg-brand-green rounded-lg hover:bg-brand-green-dark transition-colors"
+              <button
+                onClick={() => {
+                  onOpen();
+                  setMobileOpen(false);
+                }}
+                className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white bg-brand-green rounded-lg hover:bg-brand-green-dark transition-colors"
               >
                 Talk to Our AI Consultant
-              </a>
+              </button>
             </div>
           </div>
         )}

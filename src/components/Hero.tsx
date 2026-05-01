@@ -1,4 +1,4 @@
-export function Hero() {
+export function Hero({ onOpen }: { onOpen: () => void }) {
   return (
     <section className="bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 lg:pb-28">
@@ -17,12 +17,12 @@ export function Hero() {
           </p>
 
           <div className="mt-8">
-            <a
-              href="#cta"
+            <button
+              onClick={onOpen}
               className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-brand-green rounded-xl hover:bg-brand-green-dark transition-colors shadow-lg shadow-brand-green/25"
             >
               Talk to Our AI Consultant
-            </a>
+            </button>
             <p className="mt-3 text-sm text-gray-400">
               No sign-up needed. Takes 5 minutes.
             </p>
