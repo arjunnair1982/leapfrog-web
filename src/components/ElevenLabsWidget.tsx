@@ -2,28 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "elevenlabs-convai": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement> & {
-          "agent-id": string;
-          id?: string;
-          "start-call-text"?: string;
-          "end-call-text"?: string;
-          "action-text"?: string;
-          "listening-text"?: string;
-          "speaking-text"?: string;
-          "expand-text"?: string;
-        },
-        HTMLElement
-      >;
-    }
-  }
-}
-
 export function ElevenLabsWidget() {
-  const widgetRef = useRef<HTMLElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -31,15 +11,27 @@ export function ElevenLabsWidget() {
     script.async = true;
     document.body.appendChild(script);
 
+    const widget = document.createElement("elevenlabs-convai");
+    widget.setAttribute("agent-id", "agent_8901kqh82m9mf0rswmqwmczk9vgg");
+    widget.style.display = "none";
+
+    if (containerRef.current) {
+      containerRef.current.appendChild(widget);
+    }
+
     return () => {
       document.body.removeChild(script);
+      if (containerRef.current && containerRef.current.contains(widget)) {
+        containerRef.current.removeChild(widget);
+      }
     };
   }, []);
 
   useEffect(() => {
     const handleStartAgent = () => {
-      if (widgetRef.current && typeof (widgetRef.current as any).startConversation === "function") {
-        (widgetRef.current as any).startConversation();
+      const widget = document.querySelector("elevenlabs-convai");
+      if (widget && typeof (widget as any).startConversation === "function") {
+        (widget as any).startConversation();
       }
     };
 
@@ -47,12 +39,5 @@ export function ElevenLabsWidget() {
     return () => window.removeEventListener("start-elevenlabs-agent", handleStartAgent);
   }, []);
 
-  return (
-    <elevenlabs-convai
-      ref={widgetRef}
-      id="elevenlabs-widget"
-      agent-id="agent_8901kqh82m9mf0rswmqwmczk9vgg"
-      style={{ display: "none" }}
-    />
-  );
+  return <div ref={containerRef} />;
 }
