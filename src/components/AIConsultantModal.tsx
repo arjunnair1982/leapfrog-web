@@ -1,5 +1,6 @@
 "use client";
 
+import { startAgent } from "@/components/ElevenLabsWidget";
 import { useState, useCallback } from "react";
 
 interface FormData {
@@ -121,8 +122,8 @@ export function AIConsultantModal({
       console.log("[modal] API success response:", responseData);
 
       // Save succeeded — now launch the ElevenLabs agent
-      console.log("[modal] Dispatching start-elevenlabs-agent event");
-      window.dispatchEvent(new CustomEvent("start-elevenlabs-agent"));
+      console.log("[modal] Calling startAgent()");
+      startAgent();
 
       console.log("[modal] Setting isSubmitted to true");
       setIsSubmitted(true);

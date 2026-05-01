@@ -10,7 +10,6 @@ import { SocialProof } from "@/components/SocialProof";
 import { PricingSignal } from "@/components/PricingSignal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { AIConsultantModal } from "@/components/AIConsultantModal";
-import { ElevenLabsWidget } from "@/components/ElevenLabsWidget";
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,7 +27,6 @@ export default function Home() {
         <FinalCTA onOpen={() => setModalOpen(true)} />
       </main>
       <AIConsultantModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-      <ElevenLabsWidget />
     </div>
   );
 }
