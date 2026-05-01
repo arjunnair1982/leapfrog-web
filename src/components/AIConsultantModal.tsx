@@ -98,11 +98,19 @@ export function AIConsultantModal({
 
     setIsSubmitting(true);
 
-    // Simulate API call / connection
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const res = await fetch("/api/submit-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, timestamp: new Date().toISOString() }),
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      if (!res.ok) throw new Error("Submission failed");
+      setIsSubmitted(true);
+    } catch {
+      setErrors({ name: "Something went wrong. Please try again." });
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
