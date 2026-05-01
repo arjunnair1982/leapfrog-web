@@ -12,20 +12,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
     const res = await fetch(process.env.GOOGLE_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       redirect: "follow",
+      signal: controller.signal,
       body: JSON.stringify(body),
     });
 
-    console.log("Google Script response status:", res.status);
+    clearTimeout(timeout);
 
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      console.error("Google Script error:", res.status, text);
-      throw new Error("Failed to save lead");
-    }
+    console.log("Google Script response status:", res.status);
 
     return NextResponse.json({ success: true });
   } catch (error) {
