@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { PainPoints } from "@/components/PainPoints";
