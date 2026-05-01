@@ -109,6 +109,10 @@ export function AIConsultantModal({
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Submission failed");
       }
+
+      // Save to sheet succeeded — now launch the ElevenLabs agent
+      window.dispatchEvent(new CustomEvent("start-elevenlabs-agent"));
+
       setIsSubmitted(true);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error";
