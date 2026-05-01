@@ -105,10 +105,14 @@ export function AIConsultantModal({
         body: JSON.stringify({ ...formData, timestamp: new Date().toISOString() }),
       });
 
-      if (!res.ok) throw new Error("Submission failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Submission failed");
+      }
       setIsSubmitted(true);
-    } catch {
-      setErrors({ name: "Something went wrong. Please try again." });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setErrors({ name: `Something went wrong: ${message}` });
       setIsSubmitting(false);
     }
   };
