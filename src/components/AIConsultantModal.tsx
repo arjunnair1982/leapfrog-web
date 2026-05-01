@@ -81,6 +81,7 @@ export function AIConsultantModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("[modal] Submit button clicked");
 
     const newErrors: FormErrors = {};
     const newTouched: Record<string, boolean> = {};
@@ -94,9 +95,12 @@ export function AIConsultantModal({
     setTouched(newTouched);
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some(Boolean)) return;
+    const hasErrors = Object.values(newErrors).some(Boolean);
+    console.log("[modal] Validation errors:", newErrors, "hasErrors:", hasErrors);
+    if (hasErrors) return;
 
     setIsSubmitting(true);
+    console.log("[modal] Calling /api/submit-lead with:", formData);
 
     try {
       const res = await fetch("/api/submit-lead", {
@@ -105,17 +109,26 @@ export function AIConsultantModal({
         body: JSON.stringify({ ...formData, timestamp: new Date().toISOString() }),
       });
 
+      console.log("[modal] API response status:", res.status);
+
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
+        console.log("[modal] API error response:", data);
         throw new Error(data.error || "Submission failed");
       }
 
-      // Save to sheet succeeded — now launch the ElevenLabs agent
+      const responseData = await res.json();
+      console.log("[modal] API success response:", responseData);
+
+      // Save succeeded — now launch the ElevenLabs agent
+      console.log("[modal] Dispatching start-elevenlabs-agent event");
       window.dispatchEvent(new CustomEvent("start-elevenlabs-agent"));
 
+      console.log("[modal] Setting isSubmitted to true");
       setIsSubmitted(true);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error";
+      console.error("[modal] Submit error:", err);
       setErrors({ name: `Something went wrong: ${message}` });
       setIsSubmitting(false);
     }
